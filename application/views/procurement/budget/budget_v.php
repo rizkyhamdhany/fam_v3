@@ -35,46 +35,47 @@
                 <div class="tab-content">
                     <div class="tab-pane fade active in" id="tab_2_1">
                         <!--<div class="scroller" style="height:400px; ">-->
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button id="id_Reload" style="display: none;"></button>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button id="id_Reload" style="display: none;"></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group col-md-3">
+                                    <label>Branch</label>
+                                    <?php
+                                    $data = array();
+                                    $data[''] = '';
+                                    foreach ($dd_Branch as $row) :
+                                        $data[$row->BranchID] = $row->BranchName;
+                                    endforeach;
+                                    echo form_dropdown('branch_filter', $data, '', 'id="id_branch_filter" class="form-control  input-sm select2me" required="required" onchange="ddFTBrabch(this.value)" ');
+                                    ?>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group col-md-3">
-                                        <label>Branch</label>
-                                        <?php
-                                        $data = array();
-                                        $data[''] = '';
-                                        foreach ($dd_Branch as $row) :
-                                            $data[$row->BranchID] = $row->BranchName;
-                                        endforeach;
-                                        echo form_dropdown('branch_filter', $data, '', 'id="id_branch_filter" class="form-control  input-sm select2me" required="required" onchange="ddFTBrabch(this.value)" ');
-                                        ?>
-                                    </div>
+                            <div class="col-md-12">
+                                <div class="form-group col-md-3">
+                                    <label>Jenis Budget</label>
+                                    <?php
+                                    $data = array();
+                                    $data[''] = '';
+                                    foreach ($dd_jns_budget as $row) :
+                                        $data[$row->ID_JNS_BUDGET] = $row->BUDGET_DESC;
+                                    endforeach;
+                                    echo form_dropdown('branch_filter', $data, '', 'id="id_branch_filter" class="form-control  input-sm select2me" required="required" onchange="ddFTJnsBudget(this.value)"');
+                                    ?>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group col-md-3">
-                                        <label>Jenis Budget</label>
-                                        <?php
-                                        $data = array();
-                                        $data[''] = '';
-                                        foreach ($dd_jns_budget as $row) :
-                                            $data[$row->ID_JNS_BUDGET] = $row->BUDGET_DESC;
-                                        endforeach;
-                                        echo form_dropdown('branch_filter', $data, '', 'id="id_branch_filter" class="form-control  input-sm select2me" required="required" onchange="ddFTJnsBudget(this.value)"');
-                                        ?>
-                                    </div>
-                                </div>
+                            </div>
 
-                                <div class="col-md-8 pull-right">
+                            <div id="divBudget" hidden>
+                                <div class="col-md-12">
                                     <br>
                                     <a class="btn btn-sm btn-primary" href="#" id="btnAdd" data-toggle="modal" data-target="#myadd">Upload Budget</a>
                                     <a class="btn btn-sm btn-success" href="<?php echo base_url("/procurement/budget_capex/downloadWord"); ?>" download>Download Template Budget</a>
                                     <!-- <button class="btn btn-sm btn-default">Add Item Category</button> -->
                                 </div>
-                                <div class="col-md-12" id="divBudget" hidden>
+                                <div class="col-md-12" >
                                     <br>
                                     <table class="table table-striped table-bordered table-hover text_kanan" id="table_gridBudget">
                                         <thead>
@@ -108,9 +109,10 @@
                                         </tfoot>
                                     </table>
                                 </div>
-                                <!-- end col-12 -->
                             </div>
-                            <!-- END ROW-->
+                            <!-- end col-12 -->
+                        </div>
+                        <!-- END ROW-->
                         <!--</div>-->
                     </div>
                 </div>    
@@ -222,68 +224,68 @@
                 <h4 class="modal-title">TRANSFER BUDGET</h4>
             </div>
             <div class="modal-body">
-
-                <div class="panel panel-inverse">
-                    <hr class="dotted">
-                    <div class="validator-form form-horizontal">
-                        <input type="hidden" id="BudgetID">
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Tanggal</label>
-                            <div class="col-sm-7">                                
-                                <input type="text" requered="" name="tf_tanggal" id="id_tf_tanggal" class="form-control input-sm date-picker" data-date-format="dd-mm-yyyy">
+                <form id="idTransfer">
+                    <div class="panel panel-inverse">
+                        <hr class="dotted">
+                        <div class="validator-form form-horizontal">
+                            <input type="hidden" id="BudgetID">
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Tanggal</label>
+                                <div class="col-sm-7">                                
+                                    <input type="text" requered="" name="tf_tanggal" id="id_tf_tanggal" class="form-control input-sm date-picker" data-date-format="dd-mm-yyyy">
+                                </div>
                             </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Name </label>
+                                <div class="col-sm-7">
+                                    <input type="text" requered="" name="tf_nama" class="form-control" id="id_tf_nama">
+                                </div>
+                            </div>        
+                            <div class="form-group" id="displaydivisi">
+                                <label class="control-label col-sm-3">Posisi</label>
+                                <div class="col-sm-7">
+                                    <input type="text" requered="" name="tf_posisi" class="form-control" id="id_tf_posisi">
+                                </div>
+                            </div>        
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Branch/Divisi Asal</label>
+                                <div class="col-sm-7">
+                                    <?php
+                                    $data = array();
+                                    $data[''] = '';
+                                    foreach ($dd_Branch as $row) :
+                                        $data[$row->BranchID] = $row->BranchName;
+                                    endforeach;
+                                    echo form_dropdown('tf_asal', $data, '', 'id="dd_tf_asal" class="form-control  input-sm select2me" required="required" onchange="dd_BranchTF(this.value)" ');
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Branch/Divisi Tujuan</label>
+                                <div class="col-sm-7">
+                                    <div id="DD_divTujuan"></div>
+                                </div>
+                            </div>
+                            <div class="form-group" id="displaydivisi">
+                                <label class="control-label col-sm-3">Jumlah</label>
+                                <div class="col-sm-7">
+                                    <input type="text" requered="" name="tf_jumlah" class="form-control nomor" id="id_tf_jumlah">
+                                </div>
+                            </div>        
+
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Name </label>
-                            <div class="col-sm-7">
-                                <input type="text" requered="" name="tf_nama" class="form-control" id="id_tf_nama">
-                            </div>
-                        </div>        
-                        <div class="form-group" id="displaydivisi">
-                            <label class="control-label col-sm-3">Posisi</label>
-                            <div class="col-sm-7">
-                                <input type="text" requered="" name="tf_posisi" class="form-control" id="id_tf_posisi">
-                            </div>
-                        </div>        
-
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Branch/Divisi Asal</label>
-                            <div class="col-sm-7">
-                                <?php
-                                $data = array();
-                                        $data[''] = '';
-                                foreach ($dd_Branch as $row) :
-                                    $data[$row->BranchID] = $row->BranchName;
-                                endforeach;
-                                echo form_dropdown('tf_asal', $data, '', 'id="dd_tf_asal" class="form-control  input-sm select2me" required="required" onchange="dd_BranchTF(this.value)" ');
-                                ?>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Branch/Divisi Tujuan</label>
-                            <div class="col-sm-7">
-                                <div id="DD_divTujuan"></div>
-                            </div>
-                        </div>
-                        <div class="form-group" id="displaydivisi">
-                            <label class="control-label col-sm-3">Jumlah</label>
-                            <div class="col-sm-7">
-                                <input type="text" requered="" name="tf_jumlah" class="form-control nomor" id="id_tf_jumlah">
-                            </div>
-                        </div>        
-
-                    </div>
-                </div>
-
-
-                <div class="modal-footer">
-                    <div class="btnSC">
-                        <button type="button" class="btn btn-success save" onclick="clickUpdate()">Save</button>
-                        <button type="button" class="btn btn-success update" onclick="clickUpdate()">Update</button>
-                        <button type="button" class="btn btn-warning close_" data-dismiss="modal">Close</button>                
                     </div>
 
-                </div>
+
+                    <div class="modal-footer">
+                        <div class="btnSC">
+                            <button type="submit" class="btn btn-success save" onclick="onTransfer()">OK</button>
+                            <button type="button" class="btn btn-warning close_" data-dismiss="modal">Close</button>                
+                        </div>
+
+                    </div>
+                </form>
             </div>
         </div>
     </div>
