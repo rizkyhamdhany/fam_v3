@@ -48,23 +48,25 @@
                                 </div>
                                 <div class="col-md-12">
 
-                                    <table class="table table-striped table-bordered table-hover text_kanan" id="table_gridBudgetCapex">
+                                    <table class="table table-striped table-bordered table-hover text_kanan" id="table_gridBudget">
                                         <thead>
                                             <tr>
                                                 <th>
                                                     NO
                                                 </th>     
-                                                <th>BudgetCOA</th>
-                                                <th>Year</th>
-                                                <th>BranchName</th>
-                                                <th>DivisionName</th>
-                                                <th>BudgetValue</th>
-                                                <th>BudgetUsed</th>
-                                                <th>BudgetLeftover</th>
-                                                <th>Action</th>
                                                 <th>BudgetID</th>
                                                 <th>BranchID</th>
                                                 <th>DivisionID</th>
+
+                                                <th>COA</th>
+                                                <th>Period</th>
+                                                <th>Branch</th>
+                                                <th>Division/Cabang</th>
+                                                <th>Budget</th>
+                                                <!--<th>Budget Booking</th>-->
+                                                <th>Budget Terpakai</th>
+                                                <th>Sisa Budget</th>
+                                                <th>Action</th>
 
                                             </tr>
                                         </thead>
@@ -186,5 +188,5 @@
 
 
 <?php $this->load->view('app.min.inc.php'); ?>
-<?php $this->load->view('procurement/budget_capex/budget_capex.js.php'); ?>
+<?php $this->load->view('procurement/budget/budget.js.php'); ?>
 

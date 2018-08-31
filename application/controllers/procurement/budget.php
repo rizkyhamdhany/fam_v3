@@ -4,7 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 date_default_timezone_set('Asia/Jakarta');
 
-class budget_capex extends CI_Controller {
+class Budget extends CI_Controller {
 
     function __construct() {
         parent::__construct();
@@ -14,7 +14,6 @@ class budget_capex extends CI_Controller {
             session_start();
             $this->load->model('home_m');
             $this->load->model('admin/konfigurasi_menu_status_user_m');
-//        $this->load->model('zsessions_m');
             $this->load->model('global_m');
             $this->load->model('procurement/budget_mdl', 'Budget_mdl');
             $this->load->model('datatables_custom');
@@ -33,7 +32,7 @@ class budget_capex extends CI_Controller {
     }
 
     function home() {
-        $menuId = $this->home_m->get_menu_id('procurement/budget_capex/home');
+        $menuId = $this->home_m->get_menu_id('procurement/budget/home');
         $data['menu_id'] = $menuId[0]->menu_id;
         $data['menu_parent'] = $menuId[0]->parent;
         $data['menu_nama'] = $menuId[0]->menu_nama;
@@ -50,7 +49,7 @@ class budget_capex extends CI_Controller {
 //            $data['statususer'] = $this->global_m->tampil_id_desk('sec_status_user', 'statususer_id', 'statususer_desc', 'statususer_id');
 
         $this->template->set('title', 'Budget Capex');
-        $this->template->load('template/template_dataTable', 'procurement/budget_capex/budget_capex_v', $data);
+        $this->template->load('template/template_dataTable', 'procurement/budget/budget_v', $data);
     }
 
     public function ajax_GridBudgetCapex() {
@@ -70,6 +69,10 @@ class budget_capex extends CI_Controller {
             $row = array();
             $row[] = $no;
 
+            $row[] = $idatatables->BudgetID;
+            $row[] = $idatatables->BranchID;
+            $row[] = $idatatables->DivisionID;
+
             $row[] = $idatatables->BudgetCOA;
             $row[] = $idatatables->Year;
             $row[] = $idatatables->BranchName;
@@ -79,9 +82,6 @@ class budget_capex extends CI_Controller {
             $row[] = $idatatables->BudgetLeftover;
             $row[] = '<a class="btn btn-xs btn-warning" href="#" id="btnUpdate" data-toggle="modal" data-target="#mdl_Update">Update</a>'
                     . '<a class="btn btn-xs btn-danger" href="#" id="btnDelete">Delete</a>';
-            $row[] = $idatatables->BudgetID;
-            $row[] = $idatatables->BranchID;
-            $row[] = $idatatables->DivisionID;
 
             $data[] = $row;
         }

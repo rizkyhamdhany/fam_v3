@@ -13,7 +13,7 @@
     btnStart();
 
     function loadGridBudgetCapex() {
-        dataTable = $('#table_gridBudgetCapex').DataTable({
+        dataTable = $('#table_gridBudget').DataTable({
             dom: 'C<"clear">l<"toolbar">frtip',
             initComplete: function () {
                 $("div.toolbar").append('<div class="col-md-8">\n\
@@ -39,33 +39,24 @@
             "processing": true,
             "serverSide": true,
             "ajax": {
-                url: "<?php echo base_url("/procurement/budget_capex/ajax_GridBudgetCapex"); ?>", // json datasource
+                url: "<?php echo base_url("/procurement/budget/ajax_GridBudgetCapex"); ?>", // json datasource
                 type: "post", // method  , by default get
                 data: function (z) {
                     z.sSearch = iSearch;
                 },
                 error: function () {  // error handling
-                    $(".table_gridBudgetCapex-error").html("");
+                    $(".table_gridBudget-error").html("");
                     // $("#lookup").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-                    $('#table_gridBudgetCapex tbody').html('<tbody class="employee-grid-error"><tr><th colspan="4">No data found in the server</th></tr></tbody>');
-                    $("#table_gridBudgetCapex_processing").css("display", "none");
+                    $('#table_gridBudget tbody').html('<tbody class="employee-grid-error"><tr><th colspan="4">No data found in the server</th></tr></tbody>');
+                    $("#table_gridBudget_processing").css("display", "none");
 
                 }
             },
             "columnDefs": [
                 {"targets": [-1], "orderable": false, "searchable": false},
-//                {"targets": [0], "orderable": false},
-//                {"targets": [1], "orderable": false},
-//                {"targets": [2], "orderable": false},
-//                {"targets": [3], "orderable": false},
-//                {"targets": [4], "orderable": false},
-//                {"targets": [5], "orderable": false},
-//                {"targets": [6], "orderable": false},
-//                {"targets": [7], "orderable": false},
-//                {"targets": [8], "orderable": false},
-                {"targets": [9], "visible": false, "searchable": false},
-                {"targets": [10], "visible": false, "searchable": false},
-                {"targets": [11], "visible": false, "searchable": false},
+                {"targets": [1], "visible": false, "searchable": false},
+                {"targets": [2], "visible": false, "searchable": false},
+                {"targets": [3], "visible": false, "searchable": false},
             ],
         });
     }
@@ -75,14 +66,14 @@
         var formData = new FormData($(this)[0]);
         $("#simandata").attr("disabled", "disabled").html("Loading...")
         $.ajax({
-            url: "<?php echo base_url("/procurement/budget_capex/readExcel"); ?>", // json datasource
+            url: "<?php echo base_url("/procurement/budget/readExcel"); ?>", // json datasource
             type: 'POST',
             data: new FormData(this),
             cache: false,
             contentType: false,
             processData: false,
             success: function (e) {
-                $('#table_gridBudgetCapex').DataTable().ajax.reload();
+                $('#table_gridBudget').DataTable().ajax.reload();
                 $('#closeupload').trigger('click');
             },
             complete: function () {
@@ -94,7 +85,7 @@
 
     function ddBranch(a, b) {
         $.ajax({
-            url: "<?php echo base_url("/procurement/budget_capex/ddBranch"); ?>", // json datasource
+            url: "<?php echo base_url("/procurement/budget/ddBranch"); ?>", // json datasource
             dataType: "JSON", // what to expect back from the PHP script, if anything
             type: 'post',
             cache: false,
@@ -117,7 +108,7 @@
     }
     function dd_Divisi(b) {
         $.ajax({
-            url: "<?php echo base_url("/procurement/budget_capex/ddDivisi"); ?>", // json datasource
+            url: "<?php echo base_url("/procurement/budget/ddDivisi"); ?>", // json datasource
             dataType: "JSON", // what to expect back from the PHP script, if anything
             type: 'post',
             cache: false,
@@ -145,7 +136,7 @@
         iSearch = e;
     }
 
-    $('#table_gridBudgetCapex').on('click', '#btnDelete', function () {
+    $('#table_gridBudget').on('click', '#btnDelete', function () {
         var iclosestRow = $(this).closest('tr');
         var idata = dataTable.row(iclosestRow).data();
 
@@ -153,13 +144,13 @@
             type: "POST",
             cache: false,
             dataType: "JSON",
-            url: "<?php echo base_url("/procurement/budget_capex/ajax_Delete"); ?>", // json datasource
-            data: {sbudgetID: idata[9]},
+            url: "<?php echo base_url("/procurement/budget/ajax_Delete"); ?>", // json datasource
+            data: {sbudgetID: idata[1]},
             success: function (e) {
                 // console.log(e);
                 if (e.istatus == true) {
                     alert(e.iremarks);
-                    $('#table_gridBudgetCapex').DataTable().ajax.reload();
+                    $('#table_gridBudget').DataTable().ajax.reload();
                 } else {
                     alert(e.msgTitle);
                 }
@@ -168,7 +159,7 @@
     });
 
     function clickUpdate() {
-        console.log("s");
+//        console.log("s");
         var form_data = new FormData();
         form_data.append('BudgetID', $("#BudgetID").val());
         form_data.append('BudgetCOA', $("#BudgetCOA").val());
@@ -178,7 +169,7 @@
         form_data.append('period', $("#period").val());
         console.log(form_data);
         $.ajax({
-            url: "<?php echo base_url("/procurement/budget_capex/ajax_Update"); ?>", // json datasource
+            url: "<?php echo base_url("/procurement/budget/ajax_Update"); ?>", // json datasource
             type: "POST",
             cache: false,
             contentType: false,
@@ -190,7 +181,7 @@
                 if (e.istatus == true) {
                     alert(e.iremarks);
                     $('#mdl_Update').modal('hide');
-                    $('#table_gridBudgetCapex').DataTable().ajax.reload();
+                    $('#table_gridBudget').DataTable().ajax.reload();
                 } else {
                     alert(e.iremarks);
                 }
@@ -199,18 +190,18 @@
 
     }
 
-    $('#table_gridBudgetCapex').on('click', '#btnUpdate', function () {
+    $('#table_gridBudget').on('click', '#btnUpdate', function () {
         $('#mdl_Update').find('.modal-title').text('Update');
 
         var iclosestRow = $(this).closest('tr');
         var idata = dataTable.row(iclosestRow).data();
 //        console.log(idata);
-        ddBranch(idata[10], idata[11]);
+        ddBranch(idata[2], idata[3]);
 
-        $("#BudgetCOA").val(idata[1]);
-        $("#BudgetValue").val(idata[5]);
-        $("#period").val(idata[2]);
-        $("#BudgetID").val(idata[9]);
+        $("#BudgetCOA").val(idata[4]);
+        $("#BudgetValue").val(idata[8]);
+        $("#period").val(idata[5].trim());
+        $("#BudgetID").val(idata[1]);
         document.getElementById("BudgetCOA").readOnly = true;
         $(".btnSC").show();
         $(".btnSC .save").hide();
