@@ -44,6 +44,10 @@ class Budget extends CI_Controller {
 
         $data['multilevel'] = $this->user_m->get_data(0, $this->session->userdata('usergroup'));
         $data['menu_all'] = $this->user_m->get_menu_all(0);
+        $data['dd_jns_budget'] = $this->global_m->tampil_data('SELECT ID_JNS_BUDGET,BUDGET_DESC FROM TBL_R_JNS_BUDGET');
+        $data['dd_Branch'] = $this->global_m->tampil_data("SELECT BranchID, BranchName FROM Mst_Branch where Is_trash=0");
+
+//        print_r($this->global_m->tampil_data('SELECT * FROM TBL_R_JNS_BUDGET'));die();
 //            $data['karyawan'] = $this->global_m->tampil_id_desk('master_karyawan', 'id_kyw', 'nama_kyw', 'id_kyw');
 //            $data['goluser'] = $this->global_m->tampil_id_desk('sec_gol_user', 'goluser_id', 'goluser_desc', 'goluser_id');
 //            $data['statususer'] = $this->global_m->tampil_id_desk('sec_status_user', 'statususer_id', 'statususer_desc', 'statususer_id');
@@ -55,11 +59,15 @@ class Budget extends CI_Controller {
     public function ajax_GridBudgetCapex() {
         $icolumn = array('BudgetCOA', 'Year', 'BranchName', 'DivisionName', 'BudgetValue', 'BudgetUsed', 'BudgetLeftover', 'BudgetID', 'BranchID', 'DivisionID');
 //        $icolumn = array('BudgetID');
-        $iwhere = array(
+        $ilike = array(
             $this->input->post('sSearch') => $_POST['search']['value']
         );
+        $iwhere = array(
+            'BranchID' => $this->input->post('sBranch'),
+            'Jenis_budget' => $this->input->post('sJnsBudget')
+        );
         $iorder = array('BudgetID' => 'asc');
-        $list = $this->datatables_custom->get_datatables('vw_budget_capex', $icolumn, $iorder, $iwhere);
+        $list = $this->datatables_custom->get_datatables('vw_budget_capex', $icolumn, $iorder, $iwhere, $ilike);
 
         $data = array();
         $no = $_POST['start'];
@@ -80,7 +88,8 @@ class Budget extends CI_Controller {
             $row[] = $idatatables->BudgetValue;
             $row[] = $idatatables->BudgetUsed;
             $row[] = $idatatables->BudgetLeftover;
-            $row[] = '<a class="btn btn-xs btn-warning" href="#" id="btnUpdate" data-toggle="modal" data-target="#mdl_Update">Update</a>'
+            $row[] = '<a class="btn btn-xs btn blue" href="#" id="btnTransfer" data-toggle="modal" data-target="#mdl_Transfer">Transfer</a>'
+                    . '<a class="btn btn-xs btn-warning" href="#" id="btnUpdate" data-toggle="modal" data-target="#mdl_Update">Update</a>'
                     . '<a class="btn btn-xs btn-danger" href="#" id="btnDelete">Delete</a>';
 
             $data[] = $row;
@@ -204,6 +213,19 @@ class Budget extends CI_Controller {
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         //Download
         $objWriter->save("php://output");
+    }
+
+    public function ddBranchTF() {
+        $iAsal=  $this->input->post('sDivAsal');
+        $ddBranchTujuan = $this->global_m->tampil_data("SELECT BranchID, BranchName FROM Mst_Branch where Is_trash=0 and BranchID!=$iAsal");
+        $options = "<select id='dd_tf_tujuan' class='form-control input-sm select2me'>";
+        $options .= "<option value=''>-- Select --</option>";
+        foreach ($ddBranchTujuan as $k) {
+            $options .= "<option  value='" . $k->BranchID . "'>" . $k->BranchName . "</option>";
+        }
+        $options .= "</select>";
+
+        echo json_encode($options);
     }
 
     public function ddBranch() {

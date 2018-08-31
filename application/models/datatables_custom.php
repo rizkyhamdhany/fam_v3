@@ -8,6 +8,7 @@ class datatables_custom extends CI_Model {
     public $column = array();
     public $order = array();
     public $where = array();
+    public $like = array();
     public $where_not_in = array();
     public $param_not_in;
     public $where_in = array();
@@ -28,7 +29,8 @@ class datatables_custom extends CI_Model {
 
     private function _get_datatables_query() {
         $this->db->select($this->column);
-        $this->db->like($this->where);
+        $this->db->where($this->where);
+        $this->db->like($this->like);
         $this->db->where_in($this->param_in, $this->where_in);
         $this->db->from($this->table);
         $this->db->where_not_in($this->param_not_in, $this->where_not_in);
@@ -53,12 +55,13 @@ class datatables_custom extends CI_Model {
         }
     }
 
-    function get_datatables($s_Table = null, $s_column = array(), $s_order = array(), $s_where = array()
+    function get_datatables($s_Table = null, $s_column = array(), $s_order = array(), $s_where = array(), $s_like = array()
     , $s_where_in = array(), $s_param_in = null, $s_where_not_in = array(), $s_param_not_in = null, $s_or_where = array()) {
         $this->table = $s_Table;
         $this->column = $s_column;
         $this->order = $s_order;
         $this->where = $s_where;
+        $this->like = $s_like;
         $this->where_in = $s_where_in;
         $this->param_in = $s_param_in;
         $this->where_not_in = $s_where_not_in;

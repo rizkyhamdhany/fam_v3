@@ -2,8 +2,11 @@
     var dataTable;
     var iStatus = '%';
     var iSearch = 'BudgetCOA';
+    var iBranch = 1;
+    var iJnsBudget = 1;
 
     jQuery(document).ready(function () {
+        ComponentsDateTimePickers.init();
         loadGridBudgetCapex();
 
     });
@@ -11,6 +14,15 @@
     //     TableManaged.init();
     // });
     btnStart();
+
+    function ddFTBrabch(e) {
+        iBranch = e;
+    }
+    function ddFTJnsBudget(e) {
+        iJnsBudget = e;
+        $("#divBudget").show();
+        $('#table_gridBudget').DataTable().ajax.reload();
+    }
 
     function loadGridBudgetCapex() {
         dataTable = $('#table_gridBudget').DataTable({
@@ -43,6 +55,8 @@
                 type: "post", // method  , by default get
                 data: function (z) {
                     z.sSearch = iSearch;
+                    z.sBranch = iBranch;
+                    z.sJnsBudget = iJnsBudget;
                 },
                 error: function () {  // error handling
                     $(".table_gridBudget-error").html("");
@@ -210,6 +224,52 @@
         $(".status").hide();
 
     });
+
+    $('#table_gridBudget').on('click', '#btnTransfer', function () {
+        $('#mdl_Transfer').find('.modal-title').text('TRANSFER BUDGET');
+
+        var iclosestRow = $(this).closest('tr');
+        var idata = dataTable.row(iclosestRow).data();
+//        console.log(idata);
+        dd_BranchTF();
+
+//        $("#BudgetCOA").val(idata[4]);
+//        $("#BudgetValue").val(idata[8]);
+//        $("#period").val(idata[5].trim());
+//        $("#BudgetID").val(idata[1]);
+        document.getElementById("BudgetCOA").readOnly = true;
+        $(".btnSC").show();
+        $(".btnSC .save").hide();
+        $(".btnSC .update").show();
+        $(".btnSC .close_").show();
+        $(".status").hide();
+
+    });
+
+    function dd_BranchTF(a) {
+        $.ajax({
+            url: "<?php echo base_url("/procurement/budget/ddBranchTF"); ?>", // json datasource
+            dataType: "JSON", // what to expect back from the PHP script, if anything
+            type: 'post',
+            cache: false,
+            data: {sDivAsal: a},
+            success: function (e) {
+                $("#DD_divTujuan").empty();
+                $("#DD_divTujuan").append(e);
+                // console.log(e);
+            },
+            complete: function (e) {
+//                $("#dd_id_branch").val(parseInt(a));
+//                if (parseInt($("#dd_id_branch").val()) == 1) {
+//                    dd_Divisi(b);
+//                    $("#displaydivisi").show();
+//                } else {
+//                    $("#displaydivisi").hide();
+//                }
+
+            }
+        });
+    }
 
 
 
