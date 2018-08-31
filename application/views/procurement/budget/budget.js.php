@@ -238,11 +238,9 @@
 //        $("#period").val(idata[5].trim());
 //        $("#BudgetID").val(idata[1]);
         document.getElementById("BudgetCOA").readOnly = true;
-        $(".btnSC").show();
-        $(".btnSC .save").hide();
-        $(".btnSC .update").show();
-        $(".btnSC .close_").show();
-        $(".status").hide();
+//        $(".btnSC").show();
+//        $(".btnSC .save").hide();
+//        $(".status").hide();
 
     });
 
@@ -272,66 +270,28 @@
     }
 
 
-
-
-
-
-
-
-
-    $("#id_userName").focus();
-    $("#id_showPassword").click(function () {
-        if ($('#id_chckshowPassword').is(':checked')) {
-            $('.clsPasswd').attr('type', 'text');
-        } else {
-            $('.clsPasswd').attr('type', 'password');
-        }
-    });
-    $("#id_btnSimpan").click(function () {
-        $('#idTmpAksiBtn').val('1');
-        var passwd = $('#id_kataKunci').val();
-        var confPasswd = $('#id_confKataKunci').val();
-        if (passwd == confPasswd) {
-            return true;
-        } else {
-            alert("Password dan konfirmasi password tidak sama.");
-            $("#id_password").focus();
-            return false;
-        }
-    });
-
-    $('#id_btnBatal').click(function () {
-        btnStart();
-    });
-
-    $("#id_btnSimpan").click(function () {
-        $('#idTmpAksiBtn').val('1');
-        bootbox.confirm("Apakah anda yakin menyimpan data ini?", function (o) {
-            if (o == true) {
-                $('#idFormUser').submit();
+    $("form#idTransfer").submit(function (event) {
+         event.preventDefault();
+//        $("#simandata").attr("disabled", "disabled").html("Loading...")
+        $.ajax({
+            url: "<?php echo base_url("/procurement/budget/ajax_Transfer"); ?>", // json datasource
+            type: 'POST',
+            data: new FormData(this),
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (e) {
+//                $('#table_gridBudget').DataTable().ajax.reload();
+//                $('.close_').trigger('click');
+            },
+            complete: function () {
+//                $("#simandata").removeAttr("disabled", "disabled").html("Save")
             }
         });
-
-    });
-    $("#id_btnUbah").click(function () {
-        $('#idTmpAksiBtn').val('2');
-        bootbox.confirm("Apakah anda yakin mengubah data ini?", function (o) {
-            if (o == true) {
-                $('#idFormUser').submit();
-            }
-        });
-
+        return false;
     });
 
-    $("#id_btnHapus").click(function () {
-        $('#idTmpAksiBtn').val('3');
-        bootbox.confirm("Apakah anda yakin menghapus data ini?", function (o) {
-            if (o == true) {
-                $('#idFormUser').submit();
-            }
-        });
 
-    });
 
 
 </script>

@@ -218,7 +218,7 @@ class Budget extends CI_Controller {
     public function ddBranchTF() {
         $iAsal=  $this->input->post('sDivAsal');
         $ddBranchTujuan = $this->global_m->tampil_data("SELECT BranchID, BranchName FROM Mst_Branch where Is_trash=0 and BranchID!=$iAsal");
-        $options = "<select id='dd_tf_tujuan' class='form-control input-sm select2me'>";
+        $options = "<select id='dd_tf_tujuan' name='tf_tujuan' class='form-control input-sm select2me'>";
         $options .= "<option value=''>-- Select --</option>";
         foreach ($ddBranchTujuan as $k) {
             $options .= "<option  value='" . $k->BranchID . "'>" . $k->BranchName . "</option>";
@@ -271,6 +271,31 @@ class Budget extends CI_Controller {
 
         echo json_encode($result);
     }
+    
+        public function ajax_Transfer() {
+        $data=array(
+            'TANGGAL'=>date('Y-m-d', strtotime($this->input->post('tf_tanggal'))),
+            'NAMA'=>$this->input->post('tf_nama'),
+            'POSISI'=>$this->input->post('tf_posisi'),
+            'BRANCH_DIV_ASAL'=>(int)$this->input->post('tf_asal'),
+            'BRANCH_DIV_TUJUAN'=>(int)$this->input->post('tf_tujuan'),
+            'JUMLAH'=>(float)$this->input->post('tf_jumlah'),
+            
+            'CREATE_BY'=> $this->session->userdata("id_user"),
+            'CREATE_DATE'=>date('Y-m-d h:i:s')
+        );
+//        print_r($data);die();
+        $result=$this->global_m->simpan('TBL_T_TRANSFER_BUDGET',$data);
+        if($result){
+        $result = array('istatus' => true, 'iremarks' => 'Success.!'); //, 'body'=>'Data Berhasil Disimpan');
+        }
+        else{
+                    $result = array('istatus' => false, 'iremarks' => 'Gagal.!'); //, 'body'=>'Data Berhasil Disimpan');
+        }
+        echo json_encode($result);
+    }
+    
+    
 
 }
 
