@@ -4,6 +4,8 @@
 <!-- END PAGE HEADER-->
 <!-- BEGIN PAGE CONTENT-->
 <!-- KONTEN DI SINI YA -->
+<input type="hidden" id="id_userName" value="<?php echo $this->session->userdata('user_name') ;?>">
+<input type="hidden" id="id_posisi" value="<?php echo $this->session->userdata('posisi_desc') ;?>">
 <div class="row">
     <div class="col-md-12">
         <!-- BEGIN VALIDATION STATES-->
@@ -53,8 +55,6 @@
                                     echo form_dropdown('branch_filter', $data, '', 'id="id_branch_filter" class="form-control  input-sm select2me" required="required" onchange="ddFTBrabch(this.value)" ');
                                     ?>
                                 </div>
-                            </div>
-                            <div class="col-md-12">
                                 <div class="form-group col-md-3">
                                     <label>Jenis Budget</label>
                                     <?php
@@ -66,6 +66,15 @@
                                     echo form_dropdown('branch_filter', $data, '', 'id="id_branch_filter" class="form-control  input-sm select2me" required="required" onchange="ddFTJnsBudget(this.value)"');
                                     ?>
                                 </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group col-md-3">
+                                    <label>Tahun</label>
+                                    <input type="text" requered="" name="tahun" id="id_tahun" onchange="onTahun(this.value)" class="form-control input-sm date-picker" data-date-format="yyyy">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <button class="btn btn blue" onclick="onLihat()">Lihat</button>
                             </div>
 
                             <div id="divBudget" hidden>
@@ -92,9 +101,9 @@
                                                 <th>Branch</th>
                                                 <th>Division/Cabang</th>
                                                 <th>Budget</th>
-                                                <!--<th>Budget Booking</th>-->
-                                                <th>Budget Terpakai</th>
                                                 <th>Sisa Budget</th>
+                                                <th>Budget Booking</th>
+                                                <th>Budget Terpakai</th>
                                                 <th>Action</th>
 
                                             </tr>
@@ -280,8 +289,8 @@
 
                     <div class="modal-footer">
                         <div class="btnSC">
-                            <button type="submit" class="btn btn-success save" onclick="onTransfer()">OK</button>
-                            <button type="button" class="btn btn-warning close_" data-dismiss="modal">Close</button>                
+                            <button type="submit" class="btn btn-success">OK</button>
+                            <button type="button" class="btn btn-default close_tf" data-dismiss="modal">Close</button>                
                         </div>
 
                     </div>

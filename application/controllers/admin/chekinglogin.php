@@ -97,7 +97,10 @@ class Chekinglogin extends CI_Controller {
                 'id_user' => $usr2->user_id,
                 'namaKyw' => $usr2->user_name,
                 'usergroup' => $usr2->user_groupid,
-                'usergroup_desc' => ''
+                'usergroup_desc' => '',
+                
+//                =====tambahan
+                'posisi_desc' => $userdata->data[0]->posisi_nama
             );
 //        print_r($session_data);die();
             $this->session->set_userdata($session_data);

@@ -2,9 +2,10 @@
     var dataTable;
     var iStatus = '%';
     var iSearch = 'BudgetCOA';
-    var iBranch = 1;
-    var iJnsBudget = 1;
-
+    var iBranch = '';
+    var iJnsBudget = '';
+    var iTahun = new Date().getFullYear();
+    
     jQuery(document).ready(function () {
         ComponentsDateTimePickers.init();
         loadGridBudgetCapex();
@@ -20,9 +21,22 @@
     }
     function ddFTJnsBudget(e) {
         iJnsBudget = e;
+    }
+    function onTahun(e){
+        iTahun=e;
+    }
+    function onLihat() {
         $("#divBudget").show();
         $('#table_gridBudget').DataTable().ajax.reload();
     }
+    $('#id_tahun').datepicker({
+        orientation: "left",
+        format: "yyyy",
+        viewMode: "years",
+        minViewMode: "years",
+        autoclose: true
+    });
+
 
     function loadGridBudgetCapex() {
         dataTable = $('#table_gridBudget').DataTable({
@@ -56,7 +70,8 @@
                 data: function (z) {
                     z.sSearch = iSearch;
                     z.sBranch = iBranch;
-                    z.sJnsBudget = iJnsBudget;
+                    z.sJnsBudget = iJnsBudget;iTahun
+                    z.sTahun = iTahun;
                 },
                 error: function () {  // error handling
                     $(".table_gridBudget-error").html("");
@@ -231,16 +246,14 @@
         var iclosestRow = $(this).closest('tr');
         var idata = dataTable.row(iclosestRow).data();
 //        console.log(idata);
-        dd_BranchTF();
+        dd_BranchTF(idata[3].trim());
 
-//        $("#BudgetCOA").val(idata[4]);
-//        $("#BudgetValue").val(idata[8]);
-//        $("#period").val(idata[5].trim());
-//        $("#BudgetID").val(idata[1]);
-        document.getElementById("BudgetCOA").readOnly = true;
-//        $(".btnSC").show();
-//        $(".btnSC .save").hide();
-//        $(".status").hide();
+        $("#id_tf_nama").val($("#id_userName").val());
+        $("#id_tf_posisi").val($("#id_posisi").val());
+        $("#dd_tf_asal").select2('val', idata[3].trim());
+//        document.getElementById("id_tf_nama").disabled = true;
+//        document.getElementById("id_tf_posisi").disabled = true;
+//        document.getElementById("dd_tf_asal").disabled = true;
 
     });
 
@@ -271,7 +284,7 @@
 
 
     $("form#idTransfer").submit(function (event) {
-         event.preventDefault();
+        event.preventDefault();
 //        $("#simandata").attr("disabled", "disabled").html("Loading...")
         $.ajax({
             url: "<?php echo base_url("/procurement/budget/ajax_Transfer"); ?>", // json datasource
@@ -280,15 +293,20 @@
             cache: false,
             contentType: false,
             processData: false,
+            dataType: "JSON",
             success: function (e) {
-//                $('#table_gridBudget').DataTable().ajax.reload();
-//                $('.close_').trigger('click');
+                console.log(e);
+                if (e.istatus) {
+                    $('#table_gridBudget').DataTable().ajax.reload();
+                    UIToastr.init(e.type, e.iremarks);
+                    $('.close_tf').trigger('click');
+                }
             },
             complete: function () {
 //                $("#simandata").removeAttr("disabled", "disabled").html("Save")
             }
         });
-        return false;
+//        return false;
     });
 
 

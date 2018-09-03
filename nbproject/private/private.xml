@@ -5,7 +5,11 @@
         <group>
             <file>file:/C:/Bitnami/wampstack-5.5.29-1/apache2/htdocs/fam_v3/application/views/procurement/budget/budget.js.php</file>
             <file>file:/C:/Bitnami/wampstack-5.5.29-1/apache2/htdocs/fam_v3/application/controllers/procurement/budget.php</file>
+            <file>file:/C:/Bitnami/wampstack-5.5.29-1/apache2/htdocs/fam_v3/application/controllers/procurement/purchase_request.php</file>
             <file>file:/C:/Bitnami/wampstack-5.5.29-1/apache2/htdocs/fam_v3/application/views/procurement/budget/budget_v.php</file>
+            <file>file:/C:/Bitnami/wampstack-5.5.29-1/apache2/htdocs/fam_v3/application/models/procurement/budget_mdl.php</file>
+            <file>file:/C:/Bitnami/wampstack-5.5.29-1/apache2/htdocs/fam_v3/application/controllers/admin/chekinglogin.php</file>
+            <file>file:/C:/Bitnami/wampstack-5.5.29-1/apache2/htdocs/fam_v3/application/models/procurement/requestproc_mdl.php</file>
         </group>
     </open-files>
 </project-private>

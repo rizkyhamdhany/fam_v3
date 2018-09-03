@@ -57,17 +57,18 @@ class Budget extends CI_Controller {
     }
 
     public function ajax_GridBudgetCapex() {
-        $icolumn = array('BudgetCOA', 'Year', 'BranchName', 'DivisionName', 'BudgetValue', 'BudgetUsed', 'BudgetLeftover', 'BudgetID', 'BranchID', 'DivisionID');
+        $icolumn = array('BudgetCOA', 'Year', 'BranchName', 'DivisionName', 'BudgetValue', 'sisa', 'Budget_booking','terpakai', 'BudgetID', 'BranchID', 'DivisionID');
 //        $icolumn = array('BudgetID');
         $ilike = array(
             $this->input->post('sSearch') => $_POST['search']['value']
         );
         $iwhere = array(
             'BranchID' => $this->input->post('sBranch'),
-            'Jenis_budget' => $this->input->post('sJnsBudget')
+            'Jenis_budget' => $this->input->post('sJnsBudget'),
+            'Year' => $this->input->post('sTahun')
         );
         $iorder = array('BudgetID' => 'asc');
-        $list = $this->datatables_custom->get_datatables('vw_budget_capex', $icolumn, $iorder, $iwhere, $ilike);
+        $list = $this->datatables_custom->get_datatables('VW_BUDGET', $icolumn, $iorder, $iwhere, $ilike);
 
         $data = array();
         $no = $_POST['start'];
@@ -86,10 +87,11 @@ class Budget extends CI_Controller {
             $row[] = $idatatables->BranchName;
             $row[] = $idatatables->DivisionName;
             $row[] = $idatatables->BudgetValue;
-            $row[] = $idatatables->BudgetUsed;
-            $row[] = $idatatables->BudgetLeftover;
+            $row[] = $idatatables->sisa;
+            $row[] = $idatatables->Budget_booking;
+            $row[] = $idatatables->terpakai;
             $row[] = '<a class="btn btn-xs btn blue" href="#" id="btnTransfer" data-toggle="modal" data-target="#mdl_Transfer">Transfer</a>'
-                    . '<a class="btn btn-xs btn-warning" href="#" id="btnUpdate" data-toggle="modal" data-target="#mdl_Update">Update</a>'
+//                    . '<a class="btn btn-xs btn-warning" href="#" id="btnUpdate" data-toggle="modal" data-target="#mdl_Update">Update</a>'
                     . '<a class="btn btn-xs btn-danger" href="#" id="btnDelete">Delete</a>';
 
             $data[] = $row;
@@ -279,7 +281,7 @@ class Budget extends CI_Controller {
             'POSISI'=>$this->input->post('tf_posisi'),
             'BRANCH_DIV_ASAL'=>(int)$this->input->post('tf_asal'),
             'BRANCH_DIV_TUJUAN'=>(int)$this->input->post('tf_tujuan'),
-            'JUMLAH'=>(float)$this->input->post('tf_jumlah'),
+            'JUMLAH'=> str_replace(",", "", $this->input->post('tf_jumlah')),
             
             'CREATE_BY'=> $this->session->userdata("id_user"),
             'CREATE_DATE'=>date('Y-m-d h:i:s')
@@ -287,10 +289,10 @@ class Budget extends CI_Controller {
 //        print_r($data);die();
         $result=$this->global_m->simpan('TBL_T_TRANSFER_BUDGET',$data);
         if($result){
-        $result = array('istatus' => true, 'iremarks' => 'Success.!'); //, 'body'=>'Data Berhasil Disimpan');
+        $result = array('istatus' => true, 'type'=>'success','iremarks' => 'Transfer Success.!'); //, 'body'=>'Data Berhasil Disimpan');
         }
         else{
-                    $result = array('istatus' => false, 'iremarks' => 'Gagal.!'); //, 'body'=>'Data Berhasil Disimpan');
+                    $result = array('istatus' => false,'type'=>'error', 'iremarks' => 'Transfer Gagal.!'); //, 'body'=>'Data Berhasil Disimpan');
         }
         echo json_encode($result);
     }
