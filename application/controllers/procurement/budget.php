@@ -45,6 +45,7 @@ class Budget extends CI_Controller {
         $data['multilevel'] = $this->user_m->get_data(0, $this->session->userdata('usergroup'));
         $data['menu_all'] = $this->user_m->get_menu_all(0);
         $data['dd_jns_budget'] = $this->global_m->tampil_data('SELECT ID_JNS_BUDGET,BUDGET_DESC FROM TBL_R_JNS_BUDGET');
+        $data['dd_Division'] = $this->global_m->tampil_data("SELECT DivisionID, DivisionName FROM Mst_Division where Is_trash=0");
         $data['dd_Branch'] = $this->global_m->tampil_data("SELECT BranchID, BranchName FROM Mst_Branch where Is_trash=0");
 
 //        print_r($this->global_m->tampil_data('SELECT * FROM TBL_R_JNS_BUDGET'));die();
@@ -219,11 +220,11 @@ class Budget extends CI_Controller {
 
     public function ddBranchTF() {
         $iAsal=  $this->input->post('sDivAsal');
-        $ddBranchTujuan = $this->global_m->tampil_data("SELECT BranchID, BranchName FROM Mst_Branch where Is_trash=0 and BranchID!=$iAsal");
+        $ddBranchTujuan = $this->global_m->tampil_data("SELECT DivisionID, DivisionName FROM Mst_Division where Is_trash=0 and DivisionID!=$iAsal");
         $options = "<select id='dd_tf_tujuan' name='tf_tujuan' class='form-control input-sm select2me'>";
         $options .= "<option value=''>-- Select --</option>";
         foreach ($ddBranchTujuan as $k) {
-            $options .= "<option  value='" . $k->BranchID . "'>" . $k->BranchName . "</option>";
+            $options .= "<option  value='" . $k->DivisionID . "'>" . $k->DivisionName . "</option>";
         }
         $options .= "</select>";
 

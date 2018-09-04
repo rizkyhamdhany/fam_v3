@@ -263,8 +263,8 @@
                                     <?php
                                     $data = array();
                                     $data[''] = '';
-                                    foreach ($dd_Branch as $row) :
-                                        $data[$row->BranchID] = $row->BranchName;
+                                    foreach ($dd_Division as $row) :
+                                        $data[$row->DivisionID] = $row->DivisionName;
                                     endforeach;
                                     echo form_dropdown('tf_asal', $data, '', 'id="dd_tf_asal" class="form-control  input-sm select2me" required="required" onchange="dd_BranchTF(this.value)" ');
                                     ?>
