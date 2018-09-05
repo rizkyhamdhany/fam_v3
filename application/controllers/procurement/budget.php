@@ -58,7 +58,7 @@ class Budget extends CI_Controller {
     }
 
     public function ajax_GridBudgetCapex() {
-        $icolumn = array('BudgetCOA', 'Year', 'BranchName', 'DivisionName', 'BudgetValue', 'sisa', 'Budget_booking','terpakai', 'BudgetID', 'BranchID', 'DivisionID');
+        $icolumn = array('BudgetCOA', 'Year', 'BranchName', 'DivisionName', 'BudgetValue', 'sisa', 'Budget_booking', 'terpakai', 'BudgetID', 'BranchID', 'DivisionID');
 //        $icolumn = array('BudgetID');
         $ilike = array(
             $this->input->post('sSearch') => $_POST['search']['value']
@@ -219,7 +219,7 @@ class Budget extends CI_Controller {
     }
 
     public function ddBranchTF() {
-        $iAsal=  $this->input->post('sDivAsal');
+        $iAsal = $this->input->post('sDivAsal');
         $ddBranchTujuan = $this->global_m->tampil_data("SELECT DivisionID, DivisionName FROM Mst_Division where Is_trash=0 and DivisionID!=$iAsal");
         $options = "<select id='dd_tf_tujuan' name='tf_tujuan' class='form-control input-sm select2me'>";
         $options .= "<option value=''>-- Select --</option>";
@@ -274,31 +274,109 @@ class Budget extends CI_Controller {
 
         echo json_encode($result);
     }
-    
-        public function ajax_Transfer() {
-        $data=array(
-            'TANGGAL'=>date('Y-m-d', strtotime($this->input->post('tf_tanggal'))),
-            'NAMA'=>$this->input->post('tf_nama'),
-            'POSISI'=>$this->input->post('tf_posisi'),
-            'BRANCH_DIV_ASAL'=>(int)$this->input->post('tf_asal'),
-            'BRANCH_DIV_TUJUAN'=>(int)$this->input->post('tf_tujuan'),
-            'JUMLAH'=> str_replace(",", "", $this->input->post('tf_jumlah')),
-            
-            'CREATE_BY'=> $this->session->userdata("id_user"),
-            'CREATE_DATE'=>date('Y-m-d h:i:s')
+
+    public function ajax_Transfer() {
+        $data = array(
+            'TANGGAL' => date('Y-m-d', strtotime($this->input->post('tf_tanggal'))),
+            'NAMA' => $this->input->post('tf_nama'),
+            'POSISI' => $this->input->post('tf_posisi'),
+            'BRANCH_DIV_ASAL' => (int) $this->input->post('tf_asal'),
+            'BRANCH_DIV_TUJUAN' => (int) $this->input->post('tf_tujuan'),
+            'JUMLAH' => str_replace(",", "", $this->input->post('tf_jumlah')),
+            'CREATE_BY' => $this->session->userdata("id_user"),
+            'CREATE_DATE' => date('Y-m-d h:i:s')
         );
 //        print_r($data);die();
-        $result=$this->global_m->simpan('TBL_T_TRANSFER_BUDGET',$data);
-        if($result){
-        $result = array('istatus' => true, 'type'=>'success','iremarks' => 'Transfer Success.!'); //, 'body'=>'Data Berhasil Disimpan');
-        }
-        else{
-                    $result = array('istatus' => false,'type'=>'error', 'iremarks' => 'Transfer Gagal.!'); //, 'body'=>'Data Berhasil Disimpan');
+        $result = $this->global_m->simpan('TBL_T_TRANSFER_BUDGET', $data);
+        if ($result) {
+            $result = array('istatus' => true, 'type' => 'success', 'iremarks' => 'Transfer Success.!'); //, 'body'=>'Data Berhasil Disimpan');
+        } else {
+            $result = array('istatus' => false, 'type' => 'error', 'iremarks' => 'Transfer Gagal.!'); //, 'body'=>'Data Berhasil Disimpan');
         }
         echo json_encode($result);
     }
-    
-    
+
+    public function ajax_GridSetting() {
+        $icolumn = array('ID_SETTTING_BUDGET','TAHUN', 'ID_JNS_BUDGET', 'BUDGET_DESC', 'STATUS', 'IS_TRASH');
+        $ilike = array(
+            $this->input->post('sSearch') => $_POST['search']['value']
+        );
+        $iwhere = array('IS_TRASH'=>0);
+        $iorder = array('BudgetID' => 'asc');
+        $list = $this->datatables_custom->get_datatables('VW_BUDGET_SETTING', $icolumn, $iorder, $iwhere, $ilike);
+
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $idatatables) {
+
+            $no++;
+            $row = array();
+            $row[] = $no;
+
+            $row[] = $idatatables->TAHUN;
+//            $row[] = $idatatables->ID_JNS_BUDGET;
+            $row[] = $idatatables->BUDGET_DESC;
+            $row[] = ($idatatables->STATUS == 0) ? 'Tidak Detail' : 'Detail';
+            $row[] = '<a class="btn btn-xs btn-danger" href="#" onclick="onDelete(' . $idatatables->ID_SETTTING_BUDGET . ',1)">Delete</a>';
+//            $row[] = ($idatatables->STATUS==0)?'<a class="btn btn-xs btn-danger" href="#" onclick="onDetail(' . $idatatables->ID_SETTTING_BUDGET . ',1)">Detail</a>':'<a class="btn btn-xs btn-danger" href="#" onclick="onDetail(' . $idatatables->ID_SETTTING_BUDGET . ',0)">Tidak Detail</a>';
+//            $row[] = $idatatables->ID_SETTTING_BUDGET;
+
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->datatables_custom->count_all(),
+            "recordsFiltered" => $this->datatables_custom->count_filtered(),
+            "data" => $data,
+        );
+        //output to json format
+        echo json_encode($output);
+    }
+
+    public function ajax_insert_setBudget() {
+        $data = array(
+            'TAHUN' => $this->input->post('st_Tahun'),
+            'ID_JNS_BUDGET' => (int) $this->input->post('st_jns_budget'),
+            'STATUS' => (int) $this->input->post('detail'),
+            'IS_TRASH' => 0
+        );
+//        print_r($data);die();
+        $result = $this->global_m->simpan('TBL_T_SETTING_BUDGET', $data);
+        if ($result) {
+            $result = array('istatus' => true, 'type' => 'success', 'iremarks' => 'Transfer Success.!'); //, 'body'=>'Data Berhasil Disimpan');
+        } else {
+            $result = array('istatus' => false, 'type' => 'error', 'iremarks' => 'Transfer Gagal.!'); //, 'body'=>'Data Berhasil Disimpan');
+        }
+        echo json_encode($result);
+    }
+
+    public function ajax_setDelete() {
+        $data = array('IS_TRASH' => 1);
+
+        $result = $this->global_m->ubah('TBL_T_SETTING_BUDGET', $data, 'ID_SETTTING_BUDGET', $this->input->post('sID'));
+        if ($result) {
+            $result = array('istatus' => true, 'type' => 'success', 'iremarks' => 'Delete Success.!'); //, 'body'=>'Data Berhasil Disimpan');
+        } else {
+            $result = array('istatus' => false, 'type' => 'error', 'iremarks' => 'Delete Gagal.!'); //, 'body'=>'Data Berhasil Disimpan');
+        }
+        echo json_encode($result);
+    }
+
+    public function ajax_setBudget() {
+        if ($this->input->post('sParam') == 1) {
+            $data = array('STATUS' => 1);
+        } else {
+            $data = array('STATUS' => 0);
+        }
+        $result = $this->global_m->ubah('TBL_T_SETTING_BUDGET', $data, 'ID_SETTTING_BUDGET', $this->input->post('sID'));
+        if ($result) {
+            $result = array('istatus' => true, 'type' => 'success', 'iremarks' => 'Success.!'); //, 'body'=>'Data Berhasil Disimpan');
+        } else {
+            $result = array('istatus' => false, 'type' => 'error', 'iremarks' => 'Gagal.!'); //, 'body'=>'Data Berhasil Disimpan');
+        }
+        echo json_encode($result);
+    }
 
 }
 

@@ -5,11 +5,11 @@
     var iBranch = '';
     var iJnsBudget = '';
     var iTahun = new Date().getFullYear();
-    
+
     jQuery(document).ready(function () {
         ComponentsDateTimePickers.init();
         loadGridBudgetCapex();
-
+        loadGridSetting();
     });
     // jQuery(document).ready(function () {
     //     TableManaged.init();
@@ -22,8 +22,8 @@
     function ddFTJnsBudget(e) {
         iJnsBudget = e;
     }
-    function onTahun(e){
-        iTahun=e;
+    function onTahun(e) {
+        iTahun = e;
     }
     function onLihat() {
         $("#divBudget").show();
@@ -70,7 +70,8 @@
                 data: function (z) {
                     z.sSearch = iSearch;
                     z.sBranch = iBranch;
-                    z.sJnsBudget = iJnsBudget;iTahun
+                    z.sJnsBudget = iJnsBudget;
+                    iTahun
                     z.sTahun = iTahun;
                 },
                 error: function () {  // error handling
@@ -310,6 +311,102 @@
     });
 
 
+    function loadGridSetting() {
+        dataTable = $('#table_gridSetting').DataTable({
+            "lengthMenu": [
+                [10, 15, 20, -1],
+                [10, 15, 20, "All"] // change per page values here
+            ],
+//                // set the initial value
+            "pageLength": 10,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                url: "<?php echo base_url("/procurement/budget/ajax_GridSetting"); ?>", // json datasource
+                type: "post", // method  , by default get
+//                data: function (z) {
+//                    z.sSearch = iSearch;
+//                    z.sBranch = iBranch;
+//                    z.sJnsBudget = iJnsBudget;iTahun
+//                    z.sTahun = iTahun;
+//                },
+                error: function () {  // error handling
+                    $(".table_gridSetting-error").html("");
+                    // $("#lookup").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+                    $('#table_gridSetting tbody').html('<tbody class="employee-grid-error"><tr><th colspan="4">No data found in the server</th></tr></tbody>');
+                    $("#table_gridSetting_processing").css("display", "none");
 
+                }
+            },
+            "columnDefs": [
+                {"targets": [-1], "orderable": false, "searchable": false},
+//                {"targets": [4], "visible": false, "searchable": false},
+//                {"targets": [5], "visible": false, "searchable": false},
+            ],
+        });
+    }
+
+    $('#id_st_Tahun').datepicker({
+        orientation: "left",
+        format: "yyyy",
+        viewMode: "years",
+        minViewMode: "years",
+        autoclose: true
+    });
+
+    $("form#idSetting").submit(function (event) {
+        event.preventDefault();
+        $.ajax({
+            url: "<?php echo base_url("/procurement/budget/ajax_insert_setBudget"); ?>", // json datasource
+            type: 'POST',
+            data: new FormData(this),
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: "JSON",
+            success: function (e) {
+                if (e.istatus) {
+                    $('#table_gridSetting').DataTable().ajax.reload();
+                    UIToastr.init(e.type, e.iremarks);
+                    $('.close_st').trigger('click');
+                }
+            },
+            complete: function () {
+            }
+        });
+//        return false;
+    });
+
+    function onDelete(a) {
+        $.ajax({
+            url: "<?php echo base_url("/procurement/budget/ajax_setDelete"); ?>", // json datasource
+            dataType: "JSON", // what to expect back from the PHP script, if anything
+            type: 'post',
+            cache: false,
+            data: {sID: a},
+            success: function (e) {
+                if (e.istatus) {
+                    $('#table_gridSetting').DataTable().ajax.reload();
+                    UIToastr.init(e.type, e.iremarks);
+                }
+            }
+        });
+    }
+
+    function onDetail(a, b) {
+        $.ajax({
+            url: "<?php echo base_url("/procurement/budget/ajax_setBudget"); ?>", // json datasource
+            dataType: "JSON", // what to expect back from the PHP script, if anything
+            type: 'post',
+            cache: false,
+            data: {sID: a, sParam: b},
+            success: function (e) {
+                if (e.istatus) {
+                    $('#table_gridSetting').DataTable().ajax.reload();
+                    UIToastr.init(e.type, e.iremarks);
+                }
+            }
+        });
+    }
 
 </script>
