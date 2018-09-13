@@ -72,7 +72,7 @@ Class Chekinglogin_mdl extends CI_Model
 				'DivisionID' =>$division,
 				'ZoneID' =>$zoneid,
 				'JointDate' =>date('Y-m-d H:i:s'),
-				'user_groupid' =>7,
+//				'user_groupid' =>7,
 				'user_photo' =>$foto,
 				'status' =>1,
 				'user_password' =>''

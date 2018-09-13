@@ -71,7 +71,6 @@
                     z.sSearch = iSearch;
                     z.sBranch = iBranch;
                     z.sJnsBudget = iJnsBudget;
-                    iTahun
                     z.sTahun = iTahun;
                 },
                 error: function () {  // error handling
@@ -246,7 +245,7 @@
 
         var iclosestRow = $(this).closest('tr');
         var idata = dataTable.row(iclosestRow).data();
-//        console.log(idata);
+        console.log('tes',idata);
         dd_BranchTF(idata[3].trim());
 
         $("#id_tf_nama").val($("#id_userName").val());
@@ -259,6 +258,7 @@
     });
 
     function dd_BranchTF(a) {
+//        console.log(a);
         $.ajax({
             url: "<?php echo base_url("/procurement/budget/ddBranchTF"); ?>", // json datasource
             dataType: "JSON", // what to expect back from the PHP script, if anything
@@ -312,7 +312,7 @@
 
 
     function loadGridSetting() {
-        dataTable = $('#table_gridSetting').DataTable({
+        dataTable_set = $('#table_gridSetting').DataTable({
             "lengthMenu": [
                 [10, 15, 20, -1],
                 [10, 15, 20, "All"] // change per page values here

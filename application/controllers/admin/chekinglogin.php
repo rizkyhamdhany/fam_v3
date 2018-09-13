@@ -23,17 +23,18 @@ class Chekinglogin extends CI_Controller {
         }
 
 //         echo "<pre>";
-//         print_r($apiuser);die();
+//         print_r($userdata->data[0]);die();
 
         $chekBranch = $this->Chekinglogin_mdl->chek_branch($userdata->data[0]->cabang, $userdata->data[0]->lokasi_kerja);
         $chekPosition = $this->Chekinglogin_mdl->chek_position($userdata->data[0]->posisi_nama);
         $chekDivisi = $this->Chekinglogin_mdl->chek_divisi($userdata->data[0]->organisasi_name);
         $chekinguser = $this->Chekinglogin_mdl->chek_user($userdata->data[0]->nik);
-        $usr = $chekinguser[0];
+//        $usr = $chekinguser[0];
+//         print_r($chekBranch);die();
 
         if (!empty(trim($userdata->data[0]->nik))) {
             if (empty($chekinguser)) {
-                die('tes');
+//                die('tes');
                 $maxid = $this->Chekinglogin_mdl->maxuser();
                 $id = $maxid[0]->maxid + 1;
                 $idsdm = $userdata->data[0]->idsdm;
