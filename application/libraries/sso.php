@@ -12,6 +12,7 @@ class Sso {
 	{
 //            print_r("shdhj");die();
 		redirect("http://182.23.52.249/SSO_WebService/login.php?source=".base_url()."admin/chekinglogin&app_code=MASSET");	
+		// redirect(base_url()."admin/chekinglogin&app_code=MASSET");	
 	}
 
 }

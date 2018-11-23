@@ -55,6 +55,12 @@ class Global_m extends CI_Model {
         return $query->result();
     }
 
+    function orc_tampil_data($sql) {
+        $db1 = $this->load->database('default', true);
+        $querydata = $db1->query($sql);
+        return $querydata->result();
+    }
+
     function deleteUser($tabel, $id_kolom, $id_data) {
         $this->db->trans_begin();
         $query1 = $this->db->where($id_kolom, $id_data);
@@ -133,6 +139,43 @@ class Global_m extends CI_Model {
         $result = $query->result();
 
         return$result;
+    }
+
+    function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public function getIdMax($iid, $tabel) {
+        $sql = "select " . $iid . " from " . $tabel;
+        $query = $this->db->query($sql);
+        $jml = $query->num_rows();
+        if ($jml == 0) {
+            $id = "1";
+            return $id;
+        } else {
+            $sql = "select max((" . $iid . ")) as id from " . $tabel;
+            $query = $this->db->query($sql);
+            $hasil = $query->result();
+            $id = $hasil[0]->id;
+            $id = sprintf('%03u', $id + 1);
+            return $id;
+        }
+    }
+
+    public function getFlow($status_dari) {
+        $sql = "SELECT id, flow_id, nama_flow, status_dari, action, status_ke
+                FROM dbo.MS_FLOW
+                WHERE action = 'approve' AND status_dari='". $status_dari."'" ;
+        $query = $this->db->query($sql);
+        $hasil = $query->result();
+        $ireturn = $hasil[0]->status_ke;
+        return $ireturn;
     }
 
 }

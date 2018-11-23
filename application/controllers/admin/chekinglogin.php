@@ -11,10 +11,13 @@ class Chekinglogin extends CI_Controller {
     }
 
     public function index() {
-
+        $this->load->database();
+        $query = $this->db->query("SELECT LINK FROM TBL_API_LINK WHERE API_NAME='LOGIN SSO'");
+        $result = $query->result()[0];
+        
         $secret_code = strtoupper("$3cretc0d3" . $_GET['UserName'] . ",MASSET," . $_GET['IDSDM']);
         //$apiuser = file_get_contents("http://103.76.17.197/SSO_WebService/crosscheck.php?secret=" . $secret_code . "&&app_code=MASSET&username=" . $_GET['UserName'] . "");
-        $apiuser = file_get_contents("http://182.23.52.249/SSO_WebService/crosscheck.php?secret=" . $secret_code . "&&app_code=MASSET&username=" . $_GET['UserName'] . "");
+        $apiuser = file_get_contents($result->LINK."?secret=" . $secret_code . "&&app_code=MASSET&username=" . $_GET['UserName'] . "");
         if ($apiuser) {
             $userlog = json_decode($apiuser);
             $userdata = $userlog->login[0];
@@ -59,6 +62,7 @@ class Chekinglogin extends CI_Controller {
                 $foto = $userdata->data[0]->foto;
                 $this->Chekinglogin_mdl->save_user($id, $idsdm, $nik, $usrname, $name, $email, $positionid, $branchid, $zoneid, $division, $foto);
                 $this->Chekinglogin_mdl->save_employee($id, $idsdm, $nik, $usrname, $name, $email, $positionid, $branchid, $zoneid, $division, $foto);
+
             }
             $chekinguser2 = $this->Chekinglogin_mdl->chek_user($userdata->data[0]->nik);
             $usr2 = $chekinguser2[0];
@@ -67,18 +71,18 @@ class Chekinglogin extends CI_Controller {
                 $this->check_user_avail();
             }
             if ($usr2->BranchID == "") {
-                $brc = 1;
+                $brc = 'KTRPST';
             } else {
                 $brc = $usr2->BranchID;
             }
 
             if ($usr2->user_photo == '') {
-                $foto = "" . base_url() . "assets/img/avatars/noPhoto.jpg";
+                $foto = "" . base_url() . "metronic/img/noPhoto.jpg";
             } else {
                 $foto = $usr2->user_photo;
             }
             $session_data = array(
-                'user_id' => $usr2->user_id,
+                'user_id' => $usr2->nik,
                 'name' => $usr2->name,
                 'user_name' => $usr2->user_name,
                 'user_email' => $usr2->user_email,
@@ -95,11 +99,10 @@ class Chekinglogin extends CI_Controller {
                 'foto' => $foto,
                 'is_login' => 1,
 //                ==================local mtm
-                'id_user' => $usr2->user_id,
+                'id_user' => $usr2->nik,
                 'namaKyw' => $usr2->user_name,
                 'usergroup' => $usr2->user_groupid,
                 'usergroup_desc' => '',
-                
 //                =====tambahan
                 'posisi_desc' => $userdata->data[0]->posisi_nama
             );
@@ -150,7 +153,7 @@ class Chekinglogin extends CI_Controller {
                     $branchid = $chekBranch[0]->BranchID;
                     $zoneid = $chekBranch[0]->ZoneID;
                 } else {
-                    $branchid = 1;
+                    $branchid = 'KTRPST';
                     $zoneid = 1;
                 }
 

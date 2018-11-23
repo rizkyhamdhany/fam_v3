@@ -3,6 +3,9 @@
 <script src="<?php echo base_url('metronic/global/plugins/respond.min.js'); ?>"></script>
 <script src="<?php echo base_url('metronic/global/plugins/excanvas.min.js'); ?>"></script> 
 <![endif]-->
+<script src="<?php echo base_url('metronic/global/plugins/jquery-multi-select/js/jquery.multi-select.js'); ?>" type="text/javascript"></script>
+<script src="<?php echo base_url('metronic/global/plugins/jquery-multi-select/js/components-multi-select.min.js'); ?>" type="text/javascript"></script>
+<script src="<?php echo base_url('metronic/global/plugins/bootstrap-select/js/bootstrap-select.min.js'); ?>" type="text/javascript"></script>
 <script src="<?php echo base_url('metronic/global/plugins/jquery.min.js'); ?>" type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
 <script src="<?php echo base_url('metronic/global/plugins/bootstrap/js/bootstrap.min.js'); ?>" type="text/javascript"></script>
@@ -26,8 +29,10 @@
 <script type="text/javascript" src="<?php echo base_url('metronic/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js'); ?>"></script>
 
 <script type="text/javascript" src="<?php echo base_url('metronic/global/scripts/dataTables.checkboxes.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('metronic/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js'); ?>"></script>
 
 <script type="text/javascript" src="<?php echo base_url('metronic/pages/scripts/table-datatables-editable.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('metronic/pages/scripts/form-wizard.min.js'); ?>"></script>
 
 <!-- END PAGE LEVEL PLUGINS -->
 <script>

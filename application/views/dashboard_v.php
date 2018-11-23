@@ -8,6 +8,11 @@
         <!-- KONTEN DI SINI YA -->
        <!--<img id="id_imgCR" src="<?php /* //echo base_url('metronic/img/rusun05.jpg'); */ ?>" alt=""/>-->
         <h3 class="font-grey-cascade">Dashboard <small></small></h3>
+        <?php if (isset($error)) {?>
+        <div class="alert alert-danger">
+        	<strong>Error!</strong> <?php echo $error;?> 
+        </div>
+        <?php } ?>
     </div>
 
 </div>

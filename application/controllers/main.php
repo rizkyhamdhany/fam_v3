@@ -27,7 +27,7 @@ class Main extends CI_Controller {
             //$data ['nama'] = $this->home_m->get_nama_kantor ();
             $data['menu_id'] = 0;
             $tanggal = $this->session->userdata('tgl_d');
-            $this->template->set('title', 'Mega Jaya | Beranda');
+            // $this->template->set('title', 'Mega Jaya | Beranda');
             $this->template->set('title', 'Home');
             $this->template->load('template/template1', 'dashboard_v', $data);
         }

@@ -5,10 +5,16 @@ $active_record = TRUE;
 
 $db['config1']['hostname'] = '127.0.0.1';//'127.0.0.1:3306';//192.168.13.4 localhost:3306 192.168.13.4:3306
 $db['config1']['username'] = 'sa'; //perumnas
-$db['config1']['password'] = 'plokijuh';//mmsPNMonl1n3 plokijuh890-MNB plokijuh890-MNB perumnas
-$db['config1']['database'] = 'FAM_V3';//FAMPNM asset-pnmTRIAL19022018
+$db['config1']['password'] = '132223311';//mmsPNMonl1n3 plokijuh890-MNB plokijuh890-MNB perumnas
+$db['config1']['database'] = 'fam_v3';//FAMPNM asset-pnmTRIAL19022018
 $db['config1']['dbdriver'] = 'sqlsrv';
-$db['config1']['port'] = '1433';
+// $db['config1']['port'] = '1433';
+// $db['config1']['hostname'] = '192.168.13.8';//'127.0.0.1:3306';//192.168.13.4 localhost:3306 192.168.13.4:3306
+// $db['config1']['username'] = 'sa'; //perumnas
+// $db['config1']['password'] = 'plokijuh890-MNB';//mmsPNMonl1n3 plokijuh890-MNB plokijuh890-MNB perumnas
+// $db['config1']['database'] = 'fam_V3';//FAMPNM asset-pnmTRIAL19022018
+// $db['config1']['dbdriver'] = 'sqlsrv';
+// $db['config1']['port'] = '1433';
 $db['config1']['dbprefix'] = '';
 $db['config1']['pconnect'] = TRUE;
 $db['config1']['db_debug'] = TRUE;
@@ -18,6 +24,7 @@ $db['config1']['char_set'] = 'utf8';
 $db['config1']['dbcollat'] = 'utf8_general_ci';
 $db['config1']['swap_pre'] = '';
 $db['config1']['autoinit'] = TRUE;
+
 
 
 //$db['config1']['stricton'] = FALSE; 
